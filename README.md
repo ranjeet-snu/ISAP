@@ -21,4 +21,3 @@ Ensure you have the following installed:
 - [MySQL](https://www.mysql.com/)
 
 
-   git clone https://github.com/your-username/information-security-analysis.git
