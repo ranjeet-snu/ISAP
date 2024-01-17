@@ -20,9 +20,5 @@ Ensure you have the following installed:
 - [Node.js](https://nodejs.org/)
 - [MySQL](https://www.mysql.com/)
 
-## Getting Started
 
-1. Clone the repository:
-
-   ```bash
    git clone https://github.com/your-username/information-security-analysis.git
