@@ -1,0 +1,32 @@
+body{
+    margin-top: 20px;
+    background-color: white;
+}
+.main{
+    padding: 15px;
+}
+.topbar{
+    background-color: #333;
+    overflow: hidden;
+}
+.topbar a{
+    float: right;
+    color: whitesmoke;
+    text-align: centre;
+    padding: 20px 26px;
+    text-decoration: none;
+    font-size: 26px;
+}
+.sidebar{
+    background-color: darkgray;
+    color: white;
+    height: 100%;
+}
+.card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.content{
+    background-color: whitesmoke;
+}
