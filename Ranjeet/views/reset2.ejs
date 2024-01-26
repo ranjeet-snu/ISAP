@@ -41,47 +41,99 @@
             border-radius: 3px;
             cursor: pointer;
         }
+
+        #resetSuccessMessage {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #passwordUpdateMessage {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #passwordUpdateMessage.green {
+            color: green;
+        }
+
+        #passwordUpdateMessage.red {
+            color: red;
+        }
     </style>
-    <link rel="stylesheet" href="/css/style3.css">
 </head>
 <body>
-    <nav>
-        <div class="logo">
-            <a href="https://www.pursuitsoftware.com/" target="_blank">  <img src="/img_src/logo_pursuit.jpg" alt="Logo" > </a>
-            <h2 style="color: white;">Information Security Analysis Program</h2>
-        </div>
-        <ul class="menu">
-            <li><a href="/">Home</a></li>
-            <li><a href="/course">Course</a></li>
-            <li><a href="/redirect">Register</a></li>
-            <li><a href="/contact">Contact</a></li>
-        </ul>
-        <div class="user-profile">
-           <a href="http://127.0.0.1:3002/home.html"> <img src="/img_src/user_icon.png" alt="User Profile"> </a>
-            <span>Welcome, Guest</span>
-        </div>
-    </nav>
+    <form id="forgotPasswordForm">
+        <h2>Forgot Password</h2>
+        <p>Enter your email address to reset your password.</p>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <button type="button" onclick="initiateReset()">Reset Password</button>
+    </form>
 
-<form id="forgotPasswordForm">
-    <h2>Forgot Password</h2>
-    <p>Enter your email address to reset your password.</p>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    <button type="button" onclick="resetPassword()">Reset Password</button>
-    
-</form>
+    <div id="resetSuccessMessage">
+        <p>Password reset successful! You can now set a new password below.</p>
+        <form id="resetPasswordForm">
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+            <button type="button" onclick="confirmReset()">Confirm Reset</button>
+        </form>
+        <div id="passwordUpdateMessage"></div>
+    </div>
 
-<script>
-    function resetPassword() {
-        var email = document.getElementById('email').value;
+    <script>
+        function initiateReset() {
+            var email = document.getElementById('email').value;
 
-        // Perform the necessary actions to reset the password, such as sending a reset link to the user's email.
-        // This is a placeholder and should be replaced with actual implementation.
+            // Send a request to the server to initiate the password reset process
+            fetch('/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Hide the form and display the success message
+                    document.getElementById('forgotPasswordForm').style.display = 'none';
+                    document.getElementById('resetSuccessMessage').style.display = 'block';
+                } else {
+                    // Display an error message if the email is not found
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
 
-        alert('Password reset instructions sent to ' + email);
-        document.getElementById('forgotPasswordForm').reset();
-    }
-</script>
+        function confirmReset() {
+            var email = document.getElementById('email').value;
+            var newPassword = document.getElementById('newPassword').value;
 
+            // Send a request to the server to confirm the password reset
+            fetch('/confirm-reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, newPassword: newPassword })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Display a success message
+                    document.getElementById('passwordUpdateMessage').innerText = 'Password reset successful!';
+                    document.getElementById('passwordUpdateMessage').className = 'green';
+                    document.getElementById('passwordUpdateMessage').style.display = 'block';
+                } else {
+                    // Display an error message
+                    document.getElementById('passwordUpdateMessage').innerText = 'Error resetting password. Please try again.';
+                    document.getElementById('passwordUpdateMessage').className = 'red';
+                    document.getElementById('passwordUpdateMessage').style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>
